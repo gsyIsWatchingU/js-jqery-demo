@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原生 JS vs jQuery DOM 操作对比</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .demo-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .demo-item h3 {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #75715e;
+        }
+
+        .code-block .keyword {
+            color: #66d9ef;
+        }
+
+        .code-block .string {
+            color: #e6db74;
+        }
+
+        .code-block .function {
+            color: #a6e22e;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .badge-js {
+            background: #f7df1e;
+            color: #333;
+        }
+
+        .badge-jq {
+            background: #0769ad;
+            color: white;
+        }
+
+        @media (max-width: 900px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 原生 JS vs jQuery DOM 操作对比</h1>
+
+        <div class="demo-grid">
+            <!-- 原生 JS 区域 -->
+            <div class="demo-section">
+                <h2><span class="badge badge-js">JS</span> 原生 JavaScript DOM 操作</h2>
+
+                <!-- 1. 元素选择 -->
+                <div class="demo-item">
+                    <h3>1. 元素选择</h3>
+                    <div class="code-block">
+<span class="comment">// 通过 ID 选择</span>
+<br/>
+<span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">'id'</span>);
+<br/>
+<span class="keyword">document</span>.<span class="function">querySelector</span>(<span class="string">'#id'</span>);
+<br/><br/>
+
+<span class="comment">// 通过 class 选择</span>
+<br/>
+<span class="keyword">document</span>.<span class="function">getElementsByClassName</span>(<span class="string">'class'</span>);
+<br/>
+<span class="keyword">document</span>.<span class="function">querySelectorAll</span>(<span class="string">'.class'</span>);
+<br/><br/>
+
+<span class="comment">// 通过标签选择</span> 
+<br/>
+<span class="keyword">document</span>.<span class="function">getElementsByTagName</span>(<span class="string">'div'</span>);
+<br/>
+<span class="keyword">document</span>.<span class="function">querySelectorAll</span>(<span class="string">'div'</span>);
+<br/>
+<span class="keyword">document</span>.<span class="function">querySelector</span>(<span class="string">'div'</span>);<span class="comment"> //返回第一个 </span> 
+</div>
+
+
+
+                </div>
+
+                <!-- 2. 修改内容 -->
+                <div class="demo-item">
+                    <h3>2. 修改内容</h3>
+                    <div class="code-block">
+<span class="comment">// 修改文本内容</span>
+<br/>
+element.<span class="property">textContent</span> = <span class="string">'新文本'</span>;
+<br/>
+element.<span class="property">innerText</span> = <span class="string">'新文本'</span>;
+<br/><br/>
+
+<span class="comment">// 修改 HTML</span>
+<br/>
+element.<span class="property">innerHTML</span> = <span class="string">'&lt;strong&gt;HTML&lt;/strong&gt;'</span>;
+<br/><br/>
+
+<span class="comment">// 修改表单值</span>
+<br/>
+input.<span class="property">value</span> = <span class="string">'新值'</span>;
+<br/></div>
+
+                </div>
+
+                <!-- 3. 修改样式 -->
+                <div class="demo-item">
+                    <h3>3. 修改样式</h3>
+                    <div class="code-block">
+<span class="comment">// 直接修改 style</span>
+<br/>
+element.<span class="property">style</span>.<span class="property">color</span> = <span class="string">'red'</span>;
+<br/>
+element.<span class="property">style</span>.<span class="property">backgroundColor</span> = <span class="string">'blue'</span>;
+<br/><br/>
+
+<span class="comment">// 添加/删除 class</span>
+<br/>
+element.<span class="property">classList</span>.<span class="function">add</span>(<span class="string">'active'</span>);
+<br/>
+element.<span class="property">classList</span>.<span class="function">remove</span>(<span class="string">'active'</span>);
+<br/>
+element.<span class="property">classList</span>.<span class="function">toggle</span>(<span class="string">'active'</span>);
+<br/></div>
+
+                </div>
+
+                <!-- 4. 创建和插入元素 -->
+                <div class="demo-item">
+                    <h3>4. 创建和插入元素</h3>
+                    <div class="code-block">
+<span class="comment">// 创建元素</span>
+<br/>
+<span class="keyword">const</span> div = <span class="keyword">document</span>.<span class="function">createElement</span>(<span class="string">'div'</span>);
+<br/>
+div.<span class="property">textContent</span> = <span class="string">'新元素'</span>;
+<br/><br/>
+
+<span class="comment">// 插入元素</span>
+<br/>
+parent.<span class="function">appendChild</span>(div);
+<br/>
+parent.<span class="function">insertBefore</span>(newNode, referenceNode);
+<br/>
+parent.<span class="function">append</span>(div);
+<br/>
+parent.<span class="function">prepend</span>(div);
+<br/></div>
+
+                </div>
+
+                <!-- 5. 事件绑定 -->
+                <div class="demo-item">
+                    <h3>5. 事件绑定</h3>
+                    <div class="code-block">
+<span class="comment">// 添加事件监听</span>
+<br/>
+element.<span class="function">addEventListener</span>(<span class="string">'click'</span>, <span class="keyword">function</span>(e) {
+    <span class="property">console</span>.<span class="function">log</span>(<span class="string">'点击了!'</span>);
+});
+<br/><br/>
+
+<span class="comment">// 移除事件监听</span>
+<br/>
+element.<span class="function">removeEventListener</span>(<span class="string">'click'</span>, handler);
+<br/><br/>
+
+<span class="comment">// 事件委托</span>
+<br/>
+parent.<span class="function">addEventListener</span>(<span class="string">'click'</span>, <span class="keyword">function</span>(e) {
+    <span class="keyword">if</span> (e.target.<span class="property">matches</span>(<span class="string">'.item'</span>)) {
+        <span class="comment">// 处理点击</span>
+    }
+});
+<br/></div>
+
+                </div>
+
+                <!-- 6. 属性和数据 -->
+                <div class="demo-item">
+                    <h3>6. 属性和数据操作</h3>
+                    <div class="code-block">
+<span class="comment">// 获取/设置属性</span>
+<br/>
+element.<span class="function">getAttribute</span>(<span class="string">'id'</span>);
+<br/>
+element.<span class="function">setAttribute</span>(<span class="string">'data-id'</span>, <span class="string">'123'</span>);
+<br/>
+element.<span class="function">removeAttribute</span>(<span class="string">'disabled'</span>);
+<br/><br/>
+
+<span class="comment">// 自定义数据属性</span>
+<br/>
+element.<span class="property">dataset</span>.<span class="property">userId</span> = <span class="string">'456'</span>;
+<br/>
+<span class="keyword">const</span> id = element.<span class="property">dataset</span>.<span class="property">userId</span>;
+<br/></div>
+
+                </div>
+            </div>
+
+            <!-- jQuery 区域 -->
+            <div class="demo-section">
+                <h2><span class="badge badge-jq">jQuery</span> jQuery DOM 操作</h2>
+
+                <!-- 1. 元素选择 -->
+                <div class="demo-item">
+                    <h3>1. 元素选择</h3>
+                    <div class="code-block">
+<span class="comment">// 通过 ID 选择</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#id'</span>);
+<br/><br/>
+
+<span class="comment">// 通过 class 选择</span>
+<br/>
+<span class="function">$</span>(<span class="string">'.class'</span>);
+<br/><br/>
+
+<span class="comment">// 通过标签选择</span>
+<br/>
+<span class="function">$</span>(<span class="string">'div'</span>);
+<br/><br/>
+
+<span class="comment">// 复杂选择器</span>
+<br/>
+<span class="function">$</span>(<span class="string">'ul li:first'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'input[type="text"]'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'.class1, .class2'</span>);
+<br/></div>
+
+                </div>
+
+                <!-- 2. 修改内容 -->
+                <div class="demo-item">
+                    <h3>2. 修改内容</h3>
+                    <div class="code-block">
+<span class="comment">// 修改文本内容</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">text</span>(<span class="string">'新文本'</span>);
+<br/><br/>
+
+<span class="comment">// 修改 HTML</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">html</span>(<span class="string">'&lt;strong&gt;HTML&lt;/strong&gt;'</span>);
+<br/><br/>
+
+<span class="comment">// 修改表单值</span>
+<br/>
+<span class="function">$</span>(<span class="string">'input'</span>).<span class="function">val</span>(<span class="string">'新值'</span>);
+<br/><br/>
+
+<span class="comment">// 获取内容</span>
+<br/>
+<span class="keyword">const</span> text = <span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">text</span>();
+<br/></div>
+
+                </div>
+
+                <!-- 3. 修改样式 -->
+                <div class="demo-item">
+                    <h3>3. 修改样式</h3>
+                    <div class="code-block">
+<span class="comment">// 修改 CSS</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">css</span>(<span class="string">'color'</span>, <span class="string">'red'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">css</span>({
+    <span class="property">color</span>: <span class="string">'red'</span>,
+    <span class="property">backgroundColor</span>: <span class="string">'blue'</span>
+});
+<br/><br/>
+
+<span class="comment">// 操作 class</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">addClass</span>(<span class="string">'active'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">removeClass</span>(<span class="string">'active'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">toggleClass</span>(<span class="string">'active'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">hasClass</span>(<span class="string">'active'</span>);
+<br/></div>
+
+                </div>
+
+                <!-- 4. 创建和插入元素 -->
+                <div class="demo-item">
+                    <h3>4. 创建和插入元素</h3>
+                    <div class="code-block">
+<span class="comment">// 创建元素</span>
+<br/>
+<span class="keyword">const</span> $div = <span class="function">$</span>(<span class="string">'&lt;div&gt;新元素&lt;/div&gt;'</span>);
+<br/><br/>
+
+<span class="comment">// 插入元素</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#parent'</span>).<span class="function">append</span>($div);
+<br/>
+<span class="function">$</span>(<span class="string">'#parent'</span>).<span class="function">prepend</span>($div);
+<br/>
+$div.<span class="function">appendTo</span>(<span class="string">'#parent'</span>);
+<br/>
+$div.<span class="function">prependTo</span>(<span class="string">'#parent'</span>);
+<br/><br/>
+
+<span class="comment">// 在特定位置插入</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#ref'</span>).<span class="function">before</span>($div);
+<br/>
+<span class="function">$</span>(<span class="string">'#ref'</span>).<span class="function">after</span>($div);
+<br/></div>
+
+                </div>
+
+                <!-- 5. 事件绑定 -->
+                <div class="demo-item">
+                    <h3>5. 事件绑定</h3>
+                    <div class="code-block">
+<span class="comment">// 绑定点击事件</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#btn'</span>).<span class="function">on</span>(<span class="string">'click'</span>, <span class="keyword">function</span>() {
+    <span class="property">console</span>.<span class="function">log</span>(<span class="string">'点击了!'</span>);
+});
+<br/><br/>
+
+<span class="comment">// 简写形式</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#btn'</span>).<span class="function">click</span>(<span class="keyword">function</span>() { ... });
+<br/><br/>
+
+<span class="comment">// 事件委托</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#parent'</span>).<span class="function">on</span>(<span class="string">'click'</span>, <span class="string">'.item'</span>, <span class="keyword">function</span>() {
+    <span class="comment">// 处理点击</span>
+});
+<br/><br/>
+
+<span class="comment">// 解除绑定</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#btn'</span>).<span class="function">off</span>(<span class="string">'click'</span>);
+<br/></div>
+
+                </div>
+
+                <!-- 6. 属性和数据 -->
+                <div class="demo-item">
+                    <h3>6. 属性和数据操作</h3>
+                    <div class="code-block">
+<span class="comment">// 获取/设置属性</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">attr</span>(<span class="string">'id'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">attr</span>(<span class="string">'data-id'</span>, <span class="string">'123'</span>);
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">removeAttr</span>(<span class="string">'disabled'</span>);
+<br/><br/>
+
+<span class="comment">// 自定义数据属性</span>
+<br/>
+<span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">data</span>(<span class="string">'userId'</span>, <span class="string">'456'</span>);
+<br/>
+<span class="keyword">const</span> id = <span class="function">$</span>(<span class="string">'#element'</span>).<span class="function">data</span>(<span class="string">'userId'</span>);
+<br/></div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 对比总结表格 -->
+        <div class="demo-section" style="margin-top: 20px;">
+            <h2>📊 常用操作对比表</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>操作</th>
+                        <th>原生 JavaScript</th>
+                        <th>jQuery</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>选择元素</td>
+                        <td>document.querySelector()</td>
+                        <td>$()</td>
+                    </tr>
+                    <tr>
+                        <td>选择多个元素</td>
+                        <td>document.querySelectorAll()</td>
+                        <td>$()</td>
+                    </tr>
+                    <tr>
+                        <td>修改文本</td>
+                        <td>element.textContent</td>
+                        <td>$(element).text()</td>
+                    </tr>
+                    <tr>
+                        <td>修改 HTML</td>
+                        <td>element.innerHTML</td>
+                        <td>$(element).html()</td>
+                    </tr>
+                    <tr>
+                        <td>修改样式</td>
+                        <td>element.style.property</td>
+                        <td>$(element).css()</td>
+                    </tr>
+                    <tr>
+                        <td>添加 Class</td>
+                        <td>element.classList.add()</td>
+                        <td>$(element).addClass()</td>
+                    </tr>
+                    <tr>
+                        <td>创建元素</td>
+                        <td>document.createElement()</td>
+                        <td>$('&lt;tag&gt;')</td>
+                    </tr>
+                    <tr>
+                        <td>添加子元素</td>
+                        <td>parent.appendChild()</td>
+                        <td>parent.append()</td>
+                    </tr>
+                    <tr>
+                        <td>事件监听</td>
+                        <td>element.addEventListener()</td>
+                        <td>$(element).on()</td>
+                    </tr>
+                    <tr>
+                        <td>获取属性</td>
+                        <td>element.getAttribute()</td>
+                        <td>$(element).attr()</td>
+                    </tr>
+                    <tr>
+                        <td>遍历元素</td>
+                        <td>forEach / for 循环</td>
+                        <td>.each()</td>
+                    </tr>
+                    <tr>
+                        <td>查找父元素</td>
+                        <td>element.parentElement</td>
+                        <td>$(element).parent()</td>
+                    </tr>
+                    <tr>
+                        <td>查找子元素</td>
+                        <td>element.children</td>
+                        <td>$(element).children()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</body>
+</html>
